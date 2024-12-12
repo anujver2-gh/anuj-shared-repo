@@ -1145,9 +1145,6 @@ LIMIT 0,
 ```
 For MSP org , mspOrgId column is missing
 
-2. 
-
-
 3. /Categories-by-timerange
 Passing a list of orgs and querying the dns table in stage
 using where clause
