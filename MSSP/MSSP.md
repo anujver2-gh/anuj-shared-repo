@@ -1047,7 +1047,56 @@ https://reports.api.umbrella.com/v2/organizations/8172949/total-requests?timezon
 
 
 #### Queries 
-1. /v2/organizations/8172949/requests-by-timerange/ : for proxy
+Queries are usually for following traffic types
+
+| Traffic Type        | Distribution Table          |
+|---------------------|-----------------------------|
+| dns-table 			       | dns_dist                    |
+| appcon-table 		     | 	acgw_dist                  |
+| dns-agg-table 		    | 	easyprotect_dist           |
+| proxy-table 		      | 	sig_proxy_dist             |
+| swa-table 			       | swa_dist                    |
+| ztna-table 			      | zproxy_dist                 |
+| hitcount-table 		   | 	hitcount_dist              |
+| firewall-table 		   | 	cdfw_dist                  |
+| file-events-table 	 | 		sfcn_file_event_dist      |
+| amp-retro-table 	   | 		ampretro_dist             |
+| ipblocking-table 	  | 		ipblocking_dist           |
+| intrusion-table 	   | 		ips_dist                  |
+| decryption-table 	  | 		cse_decrypt_dist          |
+| remote-access-table | 			frontizo_ra_session_dist |
+| ztna-flow-table 	   | 		zproxy_flow_dist          |
+
+1. /v2/organizations/8172949/requests-by-timerange/ : 
+For 1 org 
+
+```sql
+SELECT
+	(toStartOfMinute(toDateTime(timestamp))) AS hourhumanreadable,
+	toInt64(hourhumanreadable) AS hourtimestamp,
+	count(*) AS count,
+	SUM (assumeNotNull(CASE
+		WHEN verdict_status = 'ALLOWED' THEN 1
+		ELSE 0
+	END)) AS allowedrequestscount,
+	SUM (assumeNotNull(CASE
+		WHEN verdict_status = 'BLOCKED' THEN 1
+		ELSE 0
+	END)) AS blockedrequestscount
+FROM
+	sig_proxy_dist
+WHERE 
+	transaction_mspOrganizationId = '0' AND
+	timestamp >= toInt64(toStartOfMinute(toDateTime(1716575400))) AND
+    timestamp <= toInt64(toStartOfMinute(addHours(toDateTime(1719426600), 1))) AND
+    eventDate >= '2024-05-25' AND
+    eventDate <= '2024-06-27'
+GROUP BY
+	hourhumanreadable
+ORDER BY
+	hourhumanreadable ASC
+```
+For MSP org, for proxy
    In case of all , call this for all tables and add the results. Try CTE if supported in clickhouse to do aggregation there only.
 ```sql
 SELECT 
@@ -1070,4 +1119,28 @@ GROUP BY
 ORDER BY 
     hourhumanreadable ASC, transaction_organizationId
 ```
-2. 
+2. /v2/organizations/8172949/activity/amp-retrospective
+For 1 org
+```sql
+SELECT
+	timestamp,
+	first_seen_at AS firstseenat,
+	lower(hex(sha256)) AS sha256,
+	verdict_disposition AS disposition,
+	verdict_malwareName AS malwarename,
+	verdict_score AS score,
+	hostname
+FROM
+	ampretro_dist
+WHERE
+	(organization_id = '8137163'
+		AND (timestamp >= '1714501800'
+			AND timestamp <= '1722450600'
+			AND eventDate >= '2024-05-01'
+			AND eventDate <= '2024-08-01'))
+ORDER BY
+	timestamp DESC
+LIMIT 0,
+4999
+```
+For MSP org , mspOrgId column is missing
