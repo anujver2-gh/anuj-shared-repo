@@ -1144,3 +1144,160 @@ LIMIT 0,
 4999
 ```
 For MSP org , mspOrgId column is missing
+
+2. 
+
+
+3. /Categories-by-timerange
+Passing a list of orgs and querying the dns table in stage
+using where clause
+
+```sql
+SELECT toInt64(hourhumanreadable) AS hourtimestamp, \
+      (toStartOfHour(toDateTime(timestamp), 'UTC')) AS hourhumanreadable, \
+      arrayJoin(allCategories) AS category, \
+      count(*) AS requestCount \
+  FROM dns_dist \
+  WHERE mspOrganizationId = '8242354' \
+    AND arrayExists(x -> x IN (2200957, 2201729, 2201735, 2201745, 2202135), organizationIds) \
+    AND timestamp >= toInt64(toStartOfHour(toDateTime(1733563038), 'UTC')) \
+    AND timestamp <= toInt64(toStartOfHour(addHours(toDateTime(1733735838), 1), 'UTC')) \
+    AND eventDate >= '2024-12-07' \
+    AND eventDate <= '2024-12-09' \
+  GROUP BY organizationIds, hourhumanreadable, category \
+  ORDER BY hourhumanreadable ASC
+```
+TIME
+0.25S
+
+```sql
+SELECT toInt64(hourhumanreadable) AS hourtimestamp, \
+      toStartOfHour(toDateTime(timestamp), 'UTC') AS hourhumanreadable, \
+      arrayJoin(allCategories) AS category, \
+      count(*) AS requestCount \
+  FROM dns_dist \
+  PREWHERE \
+    mspOrganizationId = '8242354' \
+    AND timestamp >= toInt64(toStartOfHour(toDateTime(1733563038), 'UTC')) \
+    AND timestamp <= toInt64(toStartOfHour(addHours(toDateTime(1733735838), 1), 'UTC')) \
+    AND eventDate >= '2024-12-07' \
+    AND eventDate <= '2024-12-09' \
+  WHERE \
+    arrayExists(x -> x IN (2200957, 2201729, 2201735, 2201745, 2202135), organizationIds) \
+  GROUP BY hourhumanreadable, category \
+  ORDER BY hourhumanreadable ASC
+```
+
+Time
+0.17s
+
+
+4. Unique-identities
+
+dns
+
+```sql
+SELECT 
+      organizationId, 
+      originId
+  FROM dns_dist 
+  ARRAY JOIN originIds AS originId, originTypes AS originType, organizationIds AS organizationId 
+  WHERE 
+    (organizationId IN ('2200957', '2201729', '2201735', '2201745', '2202135')) 
+    AND timestamp >= '1690692318' 
+    AND timestamp <= '1731300318'
+    AND eventDate >= '2023-07-30' 
+    AND eventDate <= '2024-11-11'
+    AND mspOrganizationId = '8242354'
+  GROUP BY organizationId, originId
+  ORDER BY organizationId;
+```
+Time
+0.219s
+
+Result
+2200957 280866322
+2201729 66272027
+2201735 623295097
+2201745 623290894
+2202135 590317723
+
+5. Unique-resources
+
+```sql
+SELECT distinct(privateResourceId) AS resourceids 
+FROM zproxy_dist 
+ARRAY JOIN organizationIds AS organizationId 
+WHERE 
+    (mspOrganizationId = '0' AND isNotNull(privateResourceId) AND organizationId IN (2200957, 2201729, 2201735, 2201745, 2202135))
+    AND timestamp >= '1690712009' 
+    AND timestamp <= '1731320009' 
+    AND eventDate >= '2023-07-30' 
+    AND eventDate <= '2024-11-11'
+```
+
+```sql
+SELECT distinct(privateResourceId) AS resourceids 
+FROM zproxy_dist 
+ARRAY JOIN organizationIds AS organizationId 
+WHERE 
+    (mspOrganizationId = '0' AND isNotNull(privateResourceId) AND organizationId IN (2200957, 2201729, 2201735, 2201745, 2202135))
+    AND timestamp >= '1690712009' 
+    AND timestamp <= '1731320009' 
+    AND eventDate >= '2023-07-30' 
+    AND eventDate <= '2024-11-11'
+```
+
+USING CTE HERE IN CLICKHOUSE LOCAL FOR THIS ROUTE , ABLE TO SEE RESPONSE WITH SINGLE QUERY
+
+```sql
+WITH resource_ids_1 AS (
+    SELECT distinct privateResourceId AS resourceids
+    FROM zproxy_dist
+    WHERE 
+        mspOrganizationIds[1] = '0'  -- Filter for MSP organization
+        AND isNotNull(privateResourceId)
+        AND organizationIds[1] IN ('8137163', '2200957', '2201729', '2201735', '2201745', '2202135')  -- Apply organizationId check
+        AND timestamp >= '1690712009'
+        AND timestamp <= '1731320009'
+        AND eventDate >= '2023-07-30'
+        AND eventDate <= '2024-11-11'
+),
+resource_ids_2 AS (
+    SELECT distinct private_app_id AS resourceids
+    FROM cdfw_dist
+    WHERE 
+        organization_id IN ('8137163', '2200957', '2201729', '2201735', '2201745', '2202135')  -- Apply organizationId check
+        AND log_type = 'sfcn-fw'
+        AND timestamp >= '1690712009'
+        AND timestamp <= '1731320009'
+        AND eventDate >= '2023-07-30'
+        AND eventDate <= '2024-11-11'
+)
+SELECT distinct resourceids
+FROM (
+    SELECT resourceids FROM resource_ids_1
+    UNION DISTINCT
+    SELECT resourceids FROM resource_ids_2
+) AS combined_resource_ids
+
+```
+
+6. Overloaded-count
+
+```sql
+SELECT groupId 
+FROM acgw_dist 
+WHERE 
+    organizationIds IN (2200957, 2201729, 2201735, 2201745, 2202135) 
+    AND timestamp >= '1690712426' 
+    AND timestamp <= '1731320426' 
+    AND eventDate >= '2023-07-30' 
+    AND eventDate <= '2024-11-11' 
+GROUP BY groupId 
+HAVING avg(agentCpuUtilization) > 70
+```
+
+
+
+
