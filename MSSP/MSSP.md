@@ -1,6 +1,6 @@
 ```table-of-contents
 ```
-#### Links 
+#### Links
 
 1. [Deepesh doc for APIs](https://cisco-my.sharepoint.com/:w:/r/personal/dekausha_cisco_com/Documents/MSSP%20Analysis.docx?d=wb62ff7e546bc437b9a839cb34cb3a536&csf=1&web=1&e=apglxR)
 2. https://confluence-eng-rtp2.cisco.com/conf/display/%7Eaghiya/MSSP+Design
@@ -71,7 +71,7 @@ Screens
 #### Umbrella MSP APIs
 
 1. Total Requests uses
-`/v2/providers/2376942/requests-by-timerange/dns?`
+   `/v2/providers/2376942/requests-by-timerange/dns?`
 
 2. Security Activity uses
 ```
@@ -82,7 +82,7 @@ Screens
 /v2/providers/2376942/requests-by-timerange/dns?categories=68
 ```
 
-where categories are 
+where categories are
 ```
         "bitfieldPosition": 61,        "name": "Dynamic DNS",
         "bitfieldPosition": 65,        "name": "Enterprise Botnet",
@@ -120,16 +120,16 @@ Response is daywise count for all
 
 
 3. Total Deployment Health
-uses
-``/v2/providers/2376942/deployments`
+   uses
+   ``/v2/providers/2376942/deployments`
 
 Response
 Each array element is for each org, total 301 orgs
 In
 Total Deployment Health, we show only
-    "label": "Virtual Appliances"
-    "label": "Roaming Computers"
-    "label": "Networks"
+"label": "Virtual Appliances"
+"label": "Roaming Computers"
+"label": "Networks"
 
 ```
 {
@@ -200,7 +200,7 @@ Total Deployment Health, we show only
 
 4. Categories api call
    `/v2/providers/2376942/categories`
-Response returns list of all categories
+   Response returns list of all categories
 ```
 {
     "meta": {},
@@ -233,9 +233,9 @@ Response returns list of all categories
 
 
 
-whereas for single org it is 
+whereas for single org it is
 https://api.us.reports.umbrella.com/organizations/4/categories-by-timerange?verdict=blocked&categories=65%2C110%2C108%2C109%2C150%2C61%2C64%2C66%2C68%2C67&from=1731873294000&to=1732046094000&offset=0&timezone=UTC
-Response : 
+Response :
 ```
 {
     "meta": {},
@@ -255,10 +255,10 @@ Response :
         {
 ```
 
-#### SSE APIs 
+#### SSE APIs
 
-1. 
-Connectivity calls 
+1.
+Connectivity calls
 /v2/organizations/8172949/app-connectors/groups/overloaded-count
 
 ```
@@ -268,12 +268,12 @@ https://reports.api.umbrella.com/v2/organizations/8172949/app-connectors/groups/
 
 ```
 
-2. Security calls 
-For Security Activity tab : 
-/v2/organizations/8172949/requests-by-timerange/intrusion
-for 
-intrusionaction=detected , blocked , would_block (3 API calls)
-this returns hourly count in data array
+2. Security calls
+   For Security Activity tab :
+   /v2/organizations/8172949/requests-by-timerange/intrusion
+   for
+   intrusionaction=detected , blocked , would_block (3 API calls)
+   this returns hourly count in data array
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange/intrusion?intrusionaction=detected
 
@@ -356,7 +356,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange/
 ```
 
 /v2/organizations/8172949/activity/amp-retrospective
-this returns 
+this returns
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/activity/amp-retrospective?limit=100&offset=0&timezone=UTC&from=1733122760000&to=1733209160000
 
@@ -569,12 +569,12 @@ https://reports.api.umbrella.com/v2/organizations/8172949/categories-by-timerang
 ```
 
 
-3. Users and Groups calls 
+3. Users and Groups calls
 
 /v2/organizations/8172949/requests-by-timerange/ztna
 /v2/organizations/8172949/requests-by-timerange/remote-access
 
-this returns day-wise , hour-wise data for remote-access and ZTNA 
+this returns day-wise , hour-wise data for remote-access and ZTNA
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange/remote-access?limit=2000&offset=0&timezone=UTC&from=1733047425000&to=1733220225000
 
@@ -642,10 +642,10 @@ https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange/
         },
 ```
 
-Top 5 Users created requests 
-Calls 
+Top 5 Users created requests
+Calls
 /v2/organizations/8172949/top-identities
-to find top 5 identiteis 
+to find top 5 identiteis
 
 
 ```
@@ -789,7 +789,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/top-identities?limit=2
 
 ```
 
-and for top 5 identities calls 
+and for top 5 identities calls
 
 v2/organizations/8172949/total-requests?identityids=619766289,... : top 5 ids
 to get total requests
@@ -807,10 +807,10 @@ https://reports.api.umbrella.com/v2/organizations/8172949/total-requests?timezon
 
 
 4. Private resources
-calls 
+   calls
 
 Applications accessed
-calls 
+calls
 
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/unique-resources?limit=2000&offset=0&timezone=UTC&from=1732665600000&to=1733220854000
@@ -819,7 +819,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/unique-resources?limit
 ```
 
 Unique user identities accessed
-calls 
+calls
 
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/unique-identities?limit=2000&offset=0&timezone=UTC&exists=privateapplicationid&identitytypes=directory_user&sse=true&from=1732060800000&to=1732616054000
@@ -828,7 +828,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/unique-identities?limi
 ```
 
 Activity Search Allowed / Blocked
-calls 
+calls
 
 and shows daywise/hourwise count of allowed and blocked.
 ```
@@ -880,7 +880,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange?
 ```
 
 VPN resources accessed , Client-based ZTA , Browser-based ZTA
-calls 
+calls
 
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange/ztna?limit=2000&offset=0&timezone=UTC&from=1733048332000&to=1733221132000&exists=privateresourceid&ztnatype=clientless&sse=true
@@ -981,10 +981,10 @@ https://reports.api.umbrella.com/v2/organizations/8172949/requests-by-timerange/
         {
 
 ```
- 
+
 
 Top 3 resources accessed
-calls 
+calls
 
 ```
 https://reports.api.umbrella.com/v2/organizations/8172949/top-resources?limit=2000&offset=0&timezone=UTC&from=1732665600000&to=1733220854000&exists=privateapplicationid&sse=true
@@ -1030,7 +1030,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/top-resources?limit=20
         },
 ```
 
-and for these top 3 resources, finds total  requests 
+and for these top 3 resources, finds total  requests
 
 
 ```
@@ -1046,7 +1046,7 @@ https://reports.api.umbrella.com/v2/organizations/8172949/total-requests?timezon
 ```
 
 
-#### Queries 
+#### Queries
 Queries are usually for following traffic types
 
 | Traffic Type        | Distribution Table          |
@@ -1067,8 +1067,8 @@ Queries are usually for following traffic types
 | remote-access-table | 			frontizo_ra_session_dist |
 | ztna-flow-table 	   | 		zproxy_flow_dist          |
 
-1. /v2/organizations/8172949/requests-by-timerange/ : 
-For 1 org 
+1. /v2/organizations/8172949/requests-by-timerange/proxy :
+   For orgID
 
 ```sql
 SELECT
@@ -1096,8 +1096,10 @@ GROUP BY
 ORDER BY
 	hourhumanreadable ASC
 ```
-For MSP org, for proxy
-   In case of all , call this for all tables and add the results. Try CTE if supported in clickhouse to do aggregation there only.
+
+For MspOrgID
+
+In case of all , call this for all tables and add the results. Try CTE if supported in clickhouse to do aggregation there only.
 ```sql
 SELECT 
     transaction_organizationId AS organization_id,
@@ -1119,8 +1121,9 @@ GROUP BY
 ORDER BY 
     hourhumanreadable ASC, transaction_organizationId
 ```
+
 2. /v2/organizations/8172949/activity/amp-retrospective
-For 1 org
+   For orgID
 ```sql
 SELECT
 	timestamp,
@@ -1143,11 +1146,11 @@ ORDER BY
 LIMIT 0,
 4999
 ```
-For MSP org , mspOrgId column is missing
+For mspOrgId  , mspOrgId column is missing
 
 3. /Categories-by-timerange
-Passing a list of orgs and querying the dns table in stage
-using where clause
+   Passing a list of orgs and querying the dns table in stage
+   using where clause
 
 ```sql
 SELECT toInt64(hourhumanreadable) AS hourtimestamp, \
@@ -1190,8 +1193,7 @@ Time
 
 
 4. Unique-identities
-
-dns
+   dns
 
 ```sql
 SELECT 
@@ -1293,6 +1295,113 @@ WHERE
     AND eventDate <= '2024-11-11' 
 GROUP BY groupId 
 HAVING avg(agentCpuUtilization) > 70
+```
+
+7.  /v2/organizations/8172949/top-identities
+    For orgID
+```sql
+   SELECT
+	originId AS originid,
+	originType AS origintype,
+	organizationId AS organizationid,
+	count(*) AS count,
+	sum(response_totalSizeInBytes) AS bandwidth,
+	SUM (assumeNotNull(CASE WHEN verdict_status = 'ALLOWED' THEN 1	ELSE 0	END)) AS allowedrequestscount,
+	SUM (assumeNotNull(CASE WHEN verdict_status = 'BLOCKED' THEN 1	ELSE 0	END)) AS blockedrequestscount
+FROM
+	sig_proxy_dist ARRAY
+JOIN arrayPushFront(transaction_otherOriginIds,	transaction_originId) AS originId,
+	arrayPushFront(transaction_otherOriginTypes,	transaction_originType) AS originType,
+	arrayPushFront(transaction_otherOrganizationIds,	transaction_organizationId) AS organizationId
+WHERE
+	(((transaction_organizationId = '8137163'
+		AND organizationid = '8137163'
+		AND originType <> '13')
+	AND (timestamp >= '1714501800'
+		AND timestamp <= '1722450600'
+		AND eventDate >= '2024-05-01'
+		AND eventDate <= '2024-08-01'))
+	AND (transaction_mspOrganizationId = '0'))
+GROUP BY
+	originid,
+	origintype,
+	organizationid
+ORDER BY
+	count DESC
+LIMIT 0,10
+```
+For MspOrgID
+```sql
+SELECT
+    originId AS originid,
+    originType AS origintype,
+    COUNT(*) AS count,
+    SUM(response_totalSizeInBytes) AS bandwidth,
+    SUM(CASE WHEN verdict_status = 'ALLOWED' THEN 1 ELSE 0 END) AS allowedrequestscount,
+    SUM(CASE WHEN verdict_status = 'BLOCKED' THEN 1 ELSE 0 END) AS blockedrequestscount
+FROM
+    sig_proxy_dist
+ARRAY JOIN
+    arrayPushFront(transaction_otherOriginIds, transaction_originId) AS originId,
+    arrayPushFront(transaction_otherOriginTypes, transaction_originType) AS originType
+WHERE
+    transaction_mspOrganizationId = 0 -- Replace with the desired MSP Organization ID
+    AND originType <> 13
+    AND timestamp >= 1714501800
+    AND timestamp <= 1722450600
+    AND eventDate >= '2024-05-01'
+    AND eventDate <= '2024-08-01'
+GROUP BY
+    originid,
+    origintype
+ORDER BY
+    count DESC
+LIMIT 10;
+```
+
+9. /v2/organizations/8172949/top-resources
+   -- /v2/organizations/8172949/top-resources/ztna
+
+```sql
+SELECT
+    privateResourceId AS applicationid,
+    count(*) AS count
+FROM
+    zproxy_dist
+WHERE
+    ((organizationIds[1] = '8137163'
+        AND isNotNull(privateResourceId))
+        AND (timestamp >= '1714501800'
+            AND timestamp <= '1722450600'
+            AND eventDate >= '2024-05-01'
+            AND eventDate <= '2024-08-01'))
+GROUP BY
+    applicationid
+ORDER BY
+    count DESC
+LIMIT 0,10
+```
+
+-- top-resources MSP
+
+```sql
+SELECT
+    privateResourceId AS applicationid,
+    count(*) AS count
+FROM
+    zproxy_dist
+WHERE
+    ((mspOrganizationIds[1] = '0'
+        AND isNotNull(privateResourceId))
+        AND (timestamp >= '1714501800'
+            AND timestamp <= '1722450600'
+            AND eventDate >= '2024-05-01'
+            AND eventDate <= '2024-08-01'))
+GROUP BY
+    applicationid
+ORDER BY
+    count DESC
+LIMIT 0, 10
 ```
 
 
